@@ -54,30 +54,18 @@ class CodeWhispererSettings : PersistentStateComponent<CodeWhispererConfiguratio
         true
     )
 
-    fun toggleProjectContextEnabled(value: Boolean) {
-        state.value[CodeWhispererConfigurationType.IsProjectContextEnabled] = value
-    }
-
     fun toggleWorkspaceContextEnabled(value: Boolean) {
         state.value[CodeWhispererConfigurationType.IsWorkspaceContextEnabled] = value
     }
 
     fun isWorkspaceContextEnabled() = state.value.getOrDefault(CodeWhispererConfigurationType.IsWorkspaceContextEnabled, true)
-    fun isProjectContextEnabled() = state.value.getOrDefault(CodeWhispererConfigurationType.IsProjectContextEnabled, false)
 
-    fun isProjectContextGpu() = state.value.getOrDefault(CodeWhispererConfigurationType.IsProjectContextGpu, false)
+    @Suppress("FunctionOnlyReturningConstant")
+    fun isProjectContextEnabled() = false
 
-    fun toggleProjectContextGpu(value: Boolean) {
-        state.value[CodeWhispererConfigurationType.IsProjectContextGpu] = value
-    }
-
-    fun getProjectContextIndexThreadCount(): Int = state.intValue.getOrDefault(
-        CodeWhispererIntConfigurationType.ProjectContextIndexThreadCount,
-        0
-    ).coerceIn(CONTEXT_INDEX_THREADS)
-
-    fun setProjectContextIndexThreadCount(value: Int) {
-        state.intValue[CodeWhispererIntConfigurationType.ProjectContextIndexThreadCount] = value
+    @Suppress("UnusedParameter")
+    fun toggleProjectContextEnabled(value: Boolean, passive: Boolean = false) {
+        // no-op: workspace index settings removed
     }
 
     fun getProjectContextIndexMaxSize(): Int = state.intValue.getOrDefault(
@@ -146,7 +134,6 @@ class CodeWhispererSettings : PersistentStateComponent<CodeWhispererConfiguratio
         fun getInstance(): CodeWhispererSettings = service()
 
         val CONTEXT_INDEX_SIZE = IntRange(1, 4096)
-        val CONTEXT_INDEX_THREADS = IntRange(0, 50)
     }
 }
 
@@ -171,9 +158,6 @@ enum class CodeWhispererConfigurationType {
     IsAutoUpdateEnabled,
     IsAutoUpdateNotificationEnabled,
     IsAutoUpdateFeatureNotificationShownOnce,
-    IsProjectContextEnabled,
-    IsProjectContextGpu,
-    HasEnabledProjectContextOnce,
     IsQPrioritizedForTabAccept,
     IsTabAcceptPriorityNotificationShownOnce,
     IsWorkspaceContextEnabled,
@@ -184,6 +168,5 @@ enum class CodeWhispererStringConfigurationType {
 }
 
 enum class CodeWhispererIntConfigurationType {
-    ProjectContextIndexThreadCount,
     ProjectContextIndexMaxSize,
 }
